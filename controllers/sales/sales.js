@@ -377,7 +377,34 @@ exports.deleteRepairDetails = (req, res) => {
 
 
 
-
+// Add this function to your sales controller (controllers/sales/sales.js)
+exports.getSalesmanCommissionReport = (req, res) => {
+  const sql = `
+    SELECT 
+      salesman_id,
+      salesman_name,
+      invoice_number,
+      date,
+      net_amount,
+      salesman_commission,
+      salesman_commission_amount,
+      account_name as customer_name,
+      mobile
+    FROM repair_details
+    WHERE salesman_id IS NOT NULL 
+      AND salesman_id != ''
+      AND transaction_status IN ('Sales', 'ConvertedInvoice')
+    ORDER BY salesman_name, date DESC
+  `;
+  
+  repairModel.getSalesmanCommissionReport(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching salesman commission report:', err);
+      return res.status(500).json({ message: 'Error fetching report data', error: err.message });
+    }
+    res.json(results);
+  });
+};
 
 
 

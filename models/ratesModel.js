@@ -2,12 +2,13 @@ const db = require('../db'); // Adjust the path to your database connection
 
 const insertRates = (data, callback) => {
     const query = `
-        INSERT INTO rates (rate_date, rate_time, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO rates (rate_date, rate_time, rate_9crt, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         data.rate_date,
         data.rate_time,
+        data.rate_9crt,
         data.rate_16crt,
         data.rate_18crt,
         data.rate_22crt,
@@ -20,12 +21,13 @@ const insertRates = (data, callback) => {
 const updateCurrentRates = (data, callback) => {
     const query = `
         UPDATE current_rates
-        SET rate_date = ?, rate_time = ?, rate_16crt = ?, rate_18crt = ?, rate_22crt = ?, rate_24crt = ?, silver_rate = ?
+        SET rate_date = ?, rate_time = ?, rate_9crt = ?, rate_16crt = ?, rate_18crt = ?, rate_22crt = ?, rate_24crt = ?, silver_rate = ?
         WHERE current_rates_id = 1
     `;
     const values = [
         data.rate_date,
         data.rate_time,
+        data.rate_9crt,
         data.rate_16crt,
         data.rate_18crt,
         data.rate_22crt,
@@ -37,12 +39,13 @@ const updateCurrentRates = (data, callback) => {
 
 const insertCurrentRates = (data, callback) => {
     const query = `
-        INSERT INTO current_rates (rate_date, rate_time, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO current_rates (rate_date, rate_time, rate_9crt, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         data.rate_date,
         data.rate_time,
+        data.rate_9crt,
         data.rate_16crt,
         data.rate_18crt,
         data.rate_22crt,

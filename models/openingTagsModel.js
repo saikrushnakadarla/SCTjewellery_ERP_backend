@@ -31,7 +31,7 @@ const addOpeningTag = (data, callback) => {
           making_on, selling_price, dropdown, qr_status, stone_price_per_carat, pur_Gross_Weight, pur_Stones_Weight, pur_deduct_st_Wt,
           pur_stone_price_per_carat, pur_Stones_Price, pur_Weight_BW, pur_Making_Charges_On, pur_MC_Per_Gram, pur_Making_Charges, 
           pur_Wastage_On, pur_Wastage_Percentage, pur_WastageWeight, pur_TotalWeight_AW, tag_weight, size, pcs, image, tax_percent,
-          mrp_price, total_pcs_cost, pur_rate_cut, pur_Purity, pur_purityPercentage, printing_purity
+          mrp_price, total_pcs_cost, pur_rate_cut, pur_Purity, pur_purityPercentage, printing_purity, is_display
         ) VALUES ?`;
 
     const values = insertEntries.map(entry => [
@@ -46,7 +46,7 @@ const addOpeningTag = (data, callback) => {
       entry.pur_stone_price_per_carat, entry.pur_Stones_Price, entry.pur_Weight_BW, entry.pur_Making_Charges_On, entry.pur_MC_Per_Gram,
       entry.pur_Making_Charges, entry.pur_Wastage_On, entry.pur_Wastage_Percentage, entry.pur_WastageWeight, entry.pur_TotalWeight_AW, 
       entry.tag_weight, entry.size, entry.pcs, entry.image, entry.tax_percent, entry.mrp_price, entry.total_pcs_cost, entry.pur_rate_cut, 
-      entry.pur_Purity, entry.pur_purityPercentage, entry.printing_purity
+      entry.pur_Purity, entry.pur_purityPercentage, entry.printing_purity, entry.is_display
     ]);
 
     db.query(sql, [values], (err, result) => {

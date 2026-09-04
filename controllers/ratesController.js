@@ -18,6 +18,7 @@ const addRates = (req, res) => {
     const {
         rate_date,
         rate_time,
+        rate_9crt,
         rate_16crt,
         rate_18crt,
         rate_22crt,
@@ -26,7 +27,7 @@ const addRates = (req, res) => {
     } = req.body;
 
     // Validate input
-    if (!rate_date || !rate_time || !rate_16crt || !rate_18crt || !rate_22crt || !rate_24crt || !silver_rate) {
+    if (!rate_date || !rate_time || !rate_9crt || !rate_16crt || !rate_18crt || !rate_22crt || !rate_24crt || !silver_rate) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -38,7 +39,7 @@ const addRates = (req, res) => {
         return res.status(400).json({ error: "Invalid time format. Ensure it's in 'HH:MM:SS AM/PM' format." });
     }
 
-    const rateData = { rate_date, rate_time: formattedRateTime, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate };
+    const rateData = { rate_date, rate_time: formattedRateTime, rate_9crt, rate_16crt, rate_18crt, rate_22crt, rate_24crt, silver_rate };
 
     // Insert into `rates`
     ratesModel.insertRates(rateData, (err, ratesResult) => {

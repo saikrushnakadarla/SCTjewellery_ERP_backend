@@ -43,7 +43,8 @@ const rateCutsRoutes = require("./routes/rateCutsRoutes");
 const purchasePaymentRoutes = require("./routes/purchasePaymentRoutes");
 const offerRoutes = require("./routes/OffersRoutes");
 const repairInvoiceRoutes = require("./routes/repairInvoiceRoute");
-const advanceReceiptsRoutes = require("./routes/advanceReceiptsRoutes");
+const advanceReceiptsRoutes = require("./routes/advanceReceiptsRoutes"); 
+const onlineorders = require("./routes/onlineorders");
 
 const app = express();
 const PORT = 5001;
@@ -96,7 +97,8 @@ app.use("/", rateCutsRoutes);
 app.use("/", purchasePaymentRoutes);
 app.use('/api', offerRoutes);
 app.use('/', repairInvoiceRoutes);
-app.use('/', advanceReceiptsRoutes);
+app.use('/', advanceReceiptsRoutes); 
+app.use('/api', onlineorders);
 
 // Start the server
 app.listen(PORT, () => {

@@ -3,8 +3,10 @@ const mysql = require('mysql2');
 const db = mysql.createPool({
   host: 'localhost', 
   user: 'root', 
-  password: '', 
-  database: 'sctjewellery_erp',
+  password: 'Tharun@123', 
+  // database: 'sctjewellery_erp',  
+  database: 'updatedmanikantajewellery',
+  port:'3307',
 });
 
 

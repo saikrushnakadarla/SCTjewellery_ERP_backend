@@ -50,7 +50,10 @@ router.get('/getsales/:invoice_number', repairController.getAllRepairDetailsByIn
 router.get('/get/repair-details', repairController.getAllRepairDetails);
 router.delete('/repair-details/:invoiceNumber', repairController.deleteRepairDetails);
 // router.delete('/order-details/:invoiceNumber', repairController.deleteOrderDetails);
-router.put('/update-order-status', repairController.updateOrderStatus);
+router.put('/update-order-status', repairController.updateOrderStatus); 
+
+
+router.get('/get-salesman-commission-report', repairController.getSalesmanCommissionReport);
 
 module.exports = router;
 

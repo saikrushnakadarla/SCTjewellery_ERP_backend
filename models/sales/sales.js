@@ -221,7 +221,7 @@ exports.insert = (
               // Clone item, remove ID, and set transaction_status for new insert
               const newItem = { ...item };
               delete newItem.id; // Let DB auto-generate ID
-              newItem.transaction_status = "ConvertedInvoice"; // Set status for the new insert
+              newItem.transaction_status = "ConvertedInvoice";
               itemsToInsert.push(newItem);
             } else if (item.id && existingIdsSet.has(item.id)) {
               // Case 2: Just update
@@ -256,92 +256,97 @@ exports.insert = (
           // const balAmt = roundedNetBillAmount - paidAmt;
 
               const updateSql = `
-                UPDATE repair_details SET
-                  customer_id = ?,
-                  mobile = ?,
-                  account_name = ?,
-                  email = ?,
-                  address1 = ?,
-                  address2 = ?,
-                  city = ?,
-                  pincode = ?,
-                  state = ?,
-                  state_code = ?,
-                  aadhar_card = ?,
-                  gst_in = ?,
-                  pan_card = ?,
-                  terms = ?,
-                  date = ?,
-                  time = ?,
-                  code = ?,
-                  product_id = ?,
-                  opentag_id = ?,
-                  metal = ?,
-                  product_name = ?,
-                  metal_type = ?,
-                  design_name = ?,
-                  purity = ?,               
-                  selling_purity = ?,
-                  printing_purity = ?,
-                  custom_purity = ?,
-                  pricing = ?,
-                  category = ?,
-                  sub_category = ?,
-                  gross_weight = ?,
-                  stone_weight = ?,
-                  weight_bw = ?,
-                  stone_price = ?,
-                  va_on = ?,
-                  va_percent = ?,
-                  wastage_weight = ?,
-                  total_weight_av = ?,
-                  mc_on = ?,
-                  mc_per_gram = ?,
-                  making_charges = ?,
-                  disscount_percentage = ?,
-                  disscount = ?,
-                  festival_discount = ?,
-                  rate = ?,
-                  rate_24k = ?,
-                  pieace_cost = ?,
-                  mrp_price = ?,
-                  rate_amt = ?,
-                  tax_percent = ?,
-                  tax_amt = ?,
-                  original_total_price = ?,
-                  total_price = ?,
-                  cash_amount = ?,
-                  card_amount = ?,
-                  card_amt = ?,
-                  chq = ?,
-                  chq_amt = ?,
-                  online = ?,
-                  online_amt = ?,
-                  transaction_status = ?,
-                  qty = ?,
-                  product_image = COALESCE(?, product_image),
-                  imagePreview = ?,
-                  order_number = ?,
-                  invoice = ?,
-                  hm_charges = ?,
-                  remarks = ?,
-                  sale_status = ?,
-                  invoice_number = ?,
-                  taxable_amount = ?,
-                  tax_amount = ?,
-                  net_amount = ?,
-                  old_exchange_amt = ?,
-                  scheme_amt = ?,
-                  sale_return_amt = ?,
-                  advance_receipt_amt = ?,
-                  receipts_amt = ?,
-                  bal_after_receipts = ?,
-                  bal_amt = ?,
-                  net_bill_amount = ?,
-                  paid_amt = ?,
-                  piece_taxable_amt = ?,
-                  original_piece_taxable_amt = ?
-                WHERE id = ?`;
+  UPDATE repair_details SET
+    customer_id = ?,
+    mobile = ?,
+    account_name = ?,
+    email = ?,
+    address1 = ?,
+    address2 = ?,
+    city = ?,
+    pincode = ?,
+    state = ?,
+    state_code = ?,
+    aadhar_card = ?,
+    gst_in = ?,
+    pan_card = ?,
+    terms = ?,
+    date = ?,
+    time = ?,
+    code = ?,
+    product_id = ?,
+    opentag_id = ?,
+    metal = ?,
+    product_name = ?,
+    metal_type = ?,
+    design_name = ?,
+    purity = ?,               
+    selling_purity = ?,
+    printing_purity = ?,
+    custom_purity = ?,
+    pricing = ?,
+    category = ?,
+    sub_category = ?,
+    gross_weight = ?,
+    stone_weight = ?,
+    weight_bw = ?,
+    stone_price = ?,
+    va_on = ?,
+    va_percent = ?,
+    wastage_weight = ?,
+    total_weight_av = ?,
+    mc_on = ?,
+    mc_per_gram = ?,
+    making_charges = ?,
+    disscount_percentage = ?,
+    disscount = ?,
+    festival_discount = ?,
+    rate = ?,
+    rate_24k = ?,
+    pieace_cost = ?,
+    mrp_price = ?,
+    rate_amt = ?,
+    tax_percent = ?,
+    tax_amt = ?,
+    original_total_price = ?,
+    total_price = ?,
+    cash_amount = ?,
+    card_amount = ?,
+    card_amt = ?,
+    chq = ?,
+    chq_amt = ?,
+    online = ?,
+    online_amt = ?,
+    transaction_status = ?,
+    source = ?,
+    qty = ?,
+    product_image = COALESCE(?, product_image),
+    imagePreview = ?,
+    order_number = ?,
+    invoice = ?,
+    hm_charges = ?,
+    remarks = ?,
+    sale_status = ?,
+    invoice_number = ?,
+    taxable_amount = ?,
+    tax_amount = ?,
+    net_amount = ?,
+    old_exchange_amt = ?,
+    scheme_amt = ?,
+    sale_return_amt = ?,
+    advance_receipt_amt = ?,
+    receipts_amt = ?,
+    bal_after_receipts = ?,
+    bal_amt = ?,
+    net_bill_amount = ?,
+    paid_amt = ?,
+    piece_taxable_amt = ?,
+    original_piece_taxable_amt = ?,
+    salesman_id = ?,
+    salesman_name = ?,
+    salesman_commission = ?,
+    salesman_commission_amount = ?
+  WHERE id = ?`;
 
               const updateParams = [
                 item.customer_id || null,
@@ -405,6 +410,7 @@ exports.insert = (
                 item.online || null,
                 item.online_amt || null,
                 item.transaction_status || "Sales",
+                item.source || "Sales",
                 item.qty || null,
                 item.product_image || null,
                 item.imagePreview || null,
@@ -428,6 +434,10 @@ exports.insert = (
                 paidAmt,
                 sanitizeNumeric(item.piece_taxable_amt),
                 sanitizeNumeric(item.original_piece_taxable_amt),
+                item.salesman_id || null,
+                item.salesman_name || null,
+                item.salesman_commission || 0,
+                item.salesman_commission_amount || 0,
                 item.id,
               ];
 
@@ -523,6 +533,7 @@ exports.insert = (
               item.online || null,
               item.online_amt || null,
               item.transaction_status || "Sales",
+              item.source || "Sales",
               item.qty || null,
               item.product_image || null,
               item.imagePreview || null,
@@ -545,22 +556,26 @@ exports.insert = (
               paidAmt,
               sanitizeNumeric(item.piece_taxable_amt),
               sanitizeNumeric(item.original_piece_taxable_amt),
+              item.salesman_id || null,
+              item.salesman_name || null,
+              item.salesman_commission || 0,
+              item.salesman_commission_amount || 0,
             ];
           });
 
           const insertSql = `
-            INSERT INTO repair_details (
-              id, customer_id, mobile, account_name, email, address1, address2, city, pincode, state, state_code, 
-              aadhar_card, gst_in, pan_card, terms, date,time, invoice_number, code, product_id, opentag_id, metal, 
-              product_name, metal_type, design_name, purity, selling_purity, printing_purity,custom_purity, pricing, category, sub_category, 
-              gross_weight, stone_weight, weight_bw, stone_price, va_on, va_percent, wastage_weight, total_weight_av, 
-              mc_on, mc_per_gram, making_charges, disscount_percentage, disscount,festival_discount, rate, rate_24k, pieace_cost, mrp_price, 
-              rate_amt, tax_percent, tax_amt, original_total_price, total_price, cash_amount, card_amount, card_amt, 
-              chq, chq_amt, online, online_amt, transaction_status, qty, product_image, imagePreview, order_number, 
-              invoice, hm_charges, remarks, sale_status, taxable_amount, tax_amount, net_amount, old_exchange_amt, 
-              scheme_amt, sale_return_amt, advance_receipt_amt, receipts_amt, bal_after_receipts, bal_amt, net_bill_amount, paid_amt, 
-              piece_taxable_amt, original_piece_taxable_amt
-            ) VALUES ?`;
+  INSERT INTO repair_details (
+    id, customer_id, mobile, account_name, email, address1, address2, city, pincode, state, state_code, 
+    aadhar_card, gst_in, pan_card, terms, date, time, invoice_number, code, product_id, opentag_id, metal, 
+    product_name, metal_type, design_name, purity, selling_purity, printing_purity, custom_purity, pricing, category, sub_category, 
+    gross_weight, stone_weight, weight_bw, stone_price, va_on, va_percent, wastage_weight, total_weight_av, 
+    mc_on, mc_per_gram, making_charges, disscount_percentage, disscount, festival_discount, rate, rate_24k, pieace_cost, mrp_price, 
+    rate_amt, tax_percent, tax_amt, original_total_price, total_price, cash_amount, card_amount, card_amt, 
+    chq, chq_amt, online, online_amt, transaction_status, source, qty, product_image, imagePreview, order_number, 
+    invoice, hm_charges, remarks, sale_status, taxable_amount, tax_amount, net_amount, old_exchange_amt, 
+    scheme_amt, sale_return_amt, advance_receipt_amt, receipts_amt, bal_after_receipts, bal_amt, net_bill_amount, paid_amt, 
+    piece_taxable_amt, original_piece_taxable_amt, salesman_id, salesman_name, salesman_commission, salesman_commission_amount
+  ) VALUES ?`;
 
           // Execute all operations
           Promise.all(updatePromises)
@@ -629,7 +644,7 @@ exports.insert = (
             item.terms || null,
             item.date || null,
             currentTime,
-            newInvoiceNumber, // Using new invoice number for inserts
+            newInvoiceNumber,
             item.code || null,
             item.product_id || null,
             item.opentag_id || null,
@@ -675,6 +690,7 @@ exports.insert = (
             item.online || null,
             item.online_amt || null,
             item.transaction_status || "Sales",
+            item.source || "Sales",
             item.qty || null,
             item.product_image || null,
             item.imagePreview || null,
@@ -697,22 +713,26 @@ exports.insert = (
             paidAmt,
             sanitizeNumeric(item.piece_taxable_amt),
             sanitizeNumeric(item.original_piece_taxable_amt),
+            item.salesman_id || null,
+            item.salesman_name || null,
+            item.salesman_commission || 0,
+            item.salesman_commission_amount || 0,
           ];
         });
 
         const insertSql = `
-          INSERT INTO repair_details (
-            id, customer_id, mobile, account_name, email, address1, address2, city, pincode, state, state_code, 
-            aadhar_card, gst_in, pan_card, terms, date,time, invoice_number, code, product_id, opentag_id, metal, 
-            product_name, metal_type, design_name, purity, selling_purity, printing_purity, custom_purity, pricing, category, sub_category, 
-            gross_weight, stone_weight, weight_bw, stone_price, va_on, va_percent, wastage_weight, total_weight_av, 
-            mc_on, mc_per_gram, making_charges, disscount_percentage, disscount, festival_discount, rate, rate_24k, pieace_cost, mrp_price, 
-            rate_amt, tax_percent, tax_amt, original_total_price, total_price, cash_amount, card_amount, card_amt, 
-            chq, chq_amt, online, online_amt, transaction_status, qty, product_image, imagePreview, order_number, 
-            invoice, hm_charges, remarks, sale_status, taxable_amount, tax_amount, net_amount, old_exchange_amt, 
-            scheme_amt, sale_return_amt, advance_receipt_amt, receipts_amt, bal_after_receipts, bal_amt, net_bill_amount, paid_amt, 
-            piece_taxable_amt,original_piece_taxable_amt
-          ) VALUES ?`;
+  INSERT INTO repair_details (
+    id, customer_id, mobile, account_name, email, address1, address2, city, pincode, state, state_code, 
+    aadhar_card, gst_in, pan_card, terms, date, time, invoice_number, code, product_id, opentag_id, metal, 
+    product_name, metal_type, design_name, purity, selling_purity, printing_purity, custom_purity, pricing, category, sub_category, 
+    gross_weight, stone_weight, weight_bw, stone_price, va_on, va_percent, wastage_weight, total_weight_av, 
+    mc_on, mc_per_gram, making_charges, disscount_percentage, disscount, festival_discount, rate, rate_24k, pieace_cost, mrp_price, 
+    rate_amt, tax_percent, tax_amt, original_total_price, total_price, cash_amount, card_amount, card_amt, 
+    chq, chq_amt, online, online_amt, transaction_status, source, qty, product_image, imagePreview, order_number, 
+    invoice, hm_charges, remarks, sale_status, taxable_amount, tax_amount, net_amount, old_exchange_amt, 
+    scheme_amt, sale_return_amt, advance_receipt_amt, receipts_amt, bal_after_receipts, bal_amt, net_bill_amount, paid_amt, 
+    piece_taxable_amt, original_piece_taxable_amt, salesman_id, salesman_name, salesman_commission, salesman_commission_amount
+  ) VALUES ?`;
 
         db.query(insertSql, [insertValues], (insertErr, insertResult) => {
           if (insertErr) return callback(insertErr);
@@ -940,10 +960,9 @@ exports.getAllRepairDetailsByInvoiceNumber = (invoice_number, callback) => {
   // Query the database
   db.query(sql, [invoice_number], (err, results) => {
     if (err) {
-      return callback(err); // Pass error to the controller
+      return callback(err);
     }
-
-    callback(null, results); // Return the results to the controller
+    callback(null, results);
   });
 };
 
@@ -1034,4 +1053,8 @@ exports.deleteOldItemsByInvoice = (invoiceNumber, callback) => {
     WHERE invoice_id = ?
   `;
   db.query(sql, [invoiceNumber], callback);
+};
+
+exports.getSalesmanCommissionReport = (sql, callback) => {
+  db.query(sql, callback);
 };
